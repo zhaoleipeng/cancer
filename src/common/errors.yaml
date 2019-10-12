@@ -1,0 +1,16 @@
+###
+# Define Application Errors here.
+#
+# Format:
+# <code>#<name>: <message>
+###
+
+1#unknownError: 未知服务器错误
+2#parameterError: 请求参数错误
+3#sessionRequiredError: 登录状态异常
+4#thirdpartyServiceError: 第三方服务错误
+5#itemNotFoundError: 查询对象不存在
+6#itemStatusError: 操作对象状态错误
+7#anotherRequestInProgressError: 请等待上一次请求结束
+8#operationInvalidError: 不能进行该操作
+9#permissionError: 没有权限进行此操作

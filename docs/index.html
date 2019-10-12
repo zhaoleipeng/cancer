@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>cancer - 快速部署node架子，自带API文档，router生成，migrate功能。</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="快速部署node架子，自带API文档，router生成，migrate功能。">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <style>
+    details,
+    summary {
+      appearance: none;
+      -webkit-appearance: none;
+      -o-appearance: none;
+      -moz-appearance: none;
+      -ms-appearance: none;
+      outline: none;
+      -webkit-outline: none;
+      -o-outline: none;
+      -moz-outline: none;
+      -ms-outline: none;
+    }
+
+    summary {
+      cursor: pointer;
+    }
+
+    summary::-webkit-details-marker {
+      display: none
+    }
+
+    summary::after {
+      margin-left: 8px;
+      color: #7f8c8d;
+      font-style: italic;
+      content: '[+]';
+    }
+
+    details[open]>summary::after {
+      content: '[-]';
+    }
+
+    summary>p {
+      display: inline;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: 'cancer',
+      repo: 'https://github.com/zhaoleipeng/cancer',
+      coverpage: true,
+      loadSidebar: true,
+      subMaxLevel: 2
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-yaml.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-http.min.js"></script>
+</body>
+
+</html>

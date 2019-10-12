@@ -1,0 +1,8 @@
+env: local
+port: 8234
+db:
+  host: localhost
+  port: 3306
+  username: zhaoleipeng
+  password: zhao.123
+  database: prisma

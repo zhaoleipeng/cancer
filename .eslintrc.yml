@@ -1,0 +1,17 @@
+extends:
+  - airbnb-base
+  - prettier
+plugins:
+  - prettier
+rules:
+  no-restricted-syntax: off
+  prefer-destructuring: off
+  no-use-before-define: off
+  no-param-reassign: off
+  no-cond-assign: off
+  no-unused-vars:
+    - error
+    - args: none
+  class-methods-use-this: off
+  global-require: off
+  no-await-in-loop: off

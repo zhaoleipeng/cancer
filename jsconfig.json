@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs"
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "tester_build",
+    "tester_dev",
+  ]
+}

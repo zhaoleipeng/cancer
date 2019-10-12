@@ -1,0 +1,42 @@
+---
+apps:
+  - name: cancer
+    script: index.js
+    exec_mode: cluster
+    instances: 1
+    wait_ready: true
+    listen_timeout: 30000
+    args: ["--color"]
+    env:
+      NODE_ENV: development
+    env_test:
+      NODE_ENV: test
+    env_production:
+      NODE_ENV: production
+  - name: cancer-schedule
+    script: src/schedule/index.js
+    exec_mode: cluster
+    instances: 1
+    args: ["--color"]
+    env:
+      NODE_ENV: development
+    env_test:
+      NODE_ENV: test
+    env_production:
+      NODE_ENV: production
+deploy:
+  develop:
+    user: 
+    host: 
+    ref: origin/develop
+    repo: git@
+    path: /home/smartstudy/talk-backend
+    post-deploy: npm install && npm run sync-config -- develop && npm run migrate && npm run sync && npm run seed && pm2 startOrReload ecosystem.yaml --update-env
+  production:
+    user: 
+    host: 
+    ref: origin/master
+    repo: git@
+    path: /home/smartstudy/talk-backend
+    post-deploy: npm install && npm run sync-config -- production && npm run migrate && npm run sync && npm run seed && pm2 startOrReload ecosystem.yaml --env production --update-env
+  

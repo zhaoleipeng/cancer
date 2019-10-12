@@ -1,0 +1,4 @@
+node_modules/*
+coverage/*
+tester_build/*
+tester_dev/*
