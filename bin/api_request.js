@@ -28,10 +28,19 @@ defineEnv('port', config.get('port'));
 defineEnv('token', null);
 
 const handleResponse = res => {
-  const iv = res.headers['x-talk-enciv'];
-  if (iv) {
-    const decrypted = aes.decrypt(res.data, iv);
-    const data = JSON.parse(decrypted.toString('utf-8'));
+  const data = res.data;
+  if (data.code !== 0) {
+    log.error(`Response: ${res.status}, Code: ${data.code}`);
+    log.error(`ResError: ${inspect(data.error)}`);
+    return undefined;
+  }
+  log.trace(`Response: ${res.status}, Code: ${data.code}`);
+  return data.data;
+};
+const handleError = err => {
+  const res = err.response;
+  if (res) {
+    const data = res.data;
     if (data.code !== 0) {
       log.error(`Response: ${res.status}, Code: ${data.code}`);
       log.error(`ResError: ${inspect(data.error)}`);
@@ -39,27 +48,6 @@ const handleResponse = res => {
     }
     log.trace(`Response: ${res.status}, Code: ${data.code}`);
     return data.data;
-  }
-  log.error(`Response: ${res.status}, Not decrypted (no iv)`);
-  return res.data.toString();
-};
-const handleError = err => {
-  const res = err.response;
-  if (res) {
-    const iv = res.headers['x-talk-enciv'];
-    if (iv) {
-      const decrypted = aes.decrypt(res.data, iv);
-      const data = JSON.parse(decrypted.toString('utf-8'));
-      if (data.code !== 0) {
-        log.error(`Response: ${res.status}, Code: ${data.code}`);
-        log.error(`ResError: ${inspect(data.error)}`);
-        return undefined;
-      }
-      log.trace(`Response: ${res.status}, Code: ${data.code}`);
-      return data.data;
-    }
-    log.error(`Response: ${res.status}, Not decrypted (no iv)`);
-    return res.data.toString();
   }
   log.error(err.message);
   return undefined;
@@ -69,32 +57,21 @@ const request = (method, url, data) => {
   data = Object.assign({}, data);
   url = pathToRegexp.compile(url)(data);
   const baseURL = `${global.protocol}://${global.host}:${global.port}`;
-  const iv = aes.geniv();
-  const buffer = Buffer.from(JSON.stringify(data));
-  const encrypted = aes.encrypt(buffer, iv);
-  const headers = {
-    Accept: 'application/octet-stream',
-    'x-talk-enciv': iv,
-  };
-  const token = global.token;
-  if (token) {
-    const tokiv = aes.geniv();
-    const encryptedToken = aes.encrypt(Buffer.from(token, 'base64'), tokiv);
-    headers['x-talk-token'] = encryptedToken.toString('base64');
-    headers['x-talk-tokiv'] = tokiv;
-  }
+
+  // const headers = {
+  // };
+
   let body;
   if (method === 'post' || method === 'put') {
-    headers['Content-Type'] = 'application/octet-stream';
-    body = encrypted;
+    body = data;
   }
   let params;
   if (method === 'get' || method === 'delete') {
-    params = { data: encrypted.toString('base64') };
+    params = { data };
   }
   log.debug(`Request: ${method.toUpperCase()} ${baseURL}${url}`);
   log.debug(`ReqData: ${inspect(data, { colors: true, depth: null })}`);
-  return axios({ method, url, headers, baseURL, data: body, params }).then(
+  return axios({ method, url, baseURL, data: body, params }).then(
     handleResponse,
     handleError
   );

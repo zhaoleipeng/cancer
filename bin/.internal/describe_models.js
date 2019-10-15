@@ -285,8 +285,8 @@ if (require.main === module) {
       db.close();
     },
     err => {
-      db.close();
       console.error(err.stack || err); // eslint-disable-line
+      db.close();
     }
   );
 }

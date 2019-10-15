@@ -17,7 +17,7 @@ if (
   );
 }
 
-cnf.dialect = 'postgres';
+cnf.dialect = 'mysql';
 cnf.timezone = '+08:00';
 cnf.seederStorage = 'sequelize';
 

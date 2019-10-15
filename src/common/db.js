@@ -46,7 +46,7 @@ const operatorsAliases = {
 const db = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   port: config.port,
-  dialect: 'postgres',
+  dialect: 'mysql',
   timezone: '+08:00',
   pool: {
     max: 20,
@@ -58,4 +58,4 @@ const db = new Sequelize(config.database, config.username, config.password, {
   logging: false,
 });
 
-module.exports = { db };
+module.exports = db;
