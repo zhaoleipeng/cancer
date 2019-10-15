@@ -18,12 +18,17 @@ const dbTypeMap = {
   BIG: 'BIGINT'
 };
 
-const regexMap = {
-  BIGINT: 'BIGINT',
-  INT: 'INT',
-  VARCHAR: 'STRING'
+const regexMapHandler = {
+  'BIGINT\\(\\d+\\)': content => content,
+  'INT\\(\\d+\\)': content => content,
+  'VARCHAR\\(\\d+\\)': content => content.replace('VARCHAR', 'STRING')
 }
 
+const regexMap = {
+  'BIGINT\\(\\d+\\)': 'BIGINT',
+  'INT\\(\\d+\\)': 'INT',
+  'VARCHAR\\(\\d+\\)': 'STRING'
+}
 const typeMap = {
   TEXT: 'TEXT',
   INTEGER: 'INTEGER',
@@ -216,8 +221,9 @@ async function describeModels() {
           t = (t && t.define) || t;
           if (!t) {
             for (const regexKey of Object.keys(regexMap)) {
-              if (o.type && o.type.match(RegExp(regexKey))) {
-                return regexMap[regexKey];
+              const match = o.type && o.type.match(RegExp(regexKey));
+              if (match) {
+                return regexMapHandler[regexKey](match[0])
               }
             }
             throw new Error(`Cannot handle type "${o.type}"`);
