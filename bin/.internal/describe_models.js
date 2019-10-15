@@ -15,7 +15,14 @@ const dbTypeMap = {
   INET: 'TEXT',
   INTERVAL: 'TEXT',
   INT: 'INTEGER',
+  BIG: 'BIGINT'
 };
+
+const regexMap = {
+  BIGINT: 'BIGINT',
+  INT: 'INT',
+  VARCHAR: 'STRING'
+}
 
 const typeMap = {
   TEXT: 'TEXT',
@@ -24,6 +31,7 @@ const typeMap = {
   UUID: 'UUID',
   INT: 'INTEGER',
   'TIMESTAMP WITH TIME ZONE': 'DATE',
+  'TIMESTAMP': 'DATE',
   ARRAY: 'ARRAY',
   'INTEGER[]': { type: ['ARRAY', 'INTEGER'], define: 'ARRAY(INTEGER)' },
   'TEXT[]': { type: ['ARRAY', 'TEXT'], define: 'ARRAY(TEXT)' },
@@ -184,6 +192,11 @@ async function describeModels() {
         }
         t = (t && t.type) || t;
         if (!t) {
+          for (const regexKey of Object.keys(regexMap)) {
+            if (attr.type && attr.type.match(RegExp(regexKey))) {
+              return regexMap[regexKey];
+            }
+          }
           throw new Error(`Cannot handle type "${attr.type}"`);
         }
         return t;
@@ -202,6 +215,11 @@ async function describeModels() {
           }
           t = (t && t.define) || t;
           if (!t) {
+            for (const regexKey of Object.keys(regexMap)) {
+              if (o.type && o.type.match(RegExp(regexKey))) {
+                return regexMap[regexKey];
+              }
+            }
             throw new Error(`Cannot handle type "${o.type}"`);
           }
           return `${t}`;
