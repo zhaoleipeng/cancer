@@ -7,6 +7,7 @@ const logger = require('koa-logger');
 const serve = require('koa-static');
 const cors = require('kcors');
 const routes = require('../routes');
+const smartdoc = require('xxd-smartdoc-middleware');
 
 const app = new Koa();
 
@@ -14,7 +15,11 @@ const app = new Koa();
 app.proxy = true; // Trust proxy ips, so please deploy under nginx or other gateway that handles proxy.
 
 // Load doc
-app.use(mount('/doc', serve(path.resolve(__dirname, '../../docs/'))));
+// Load doc
+const spec = path.join(__dirname, '../../tmp/.compile/spec.json');
+const docsDir = path.join(__dirname, '../../docs');
+const prefix = '/doc'
+app.use(mount(prefix, smartdoc({ prefix, spec, docsDir })));
 app.use(mount('/tester', serve(path.resolve(__dirname, '../../tester_dev/'))));
 app.use(mount('/tester', serve(path.resolve(__dirname, '../../tester_build/'))));
 

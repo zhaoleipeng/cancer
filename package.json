@@ -74,6 +74,7 @@
     "mysql2": "^1.7.0",
     "pretty-ms": "^5.0.0",
     "sequelize": "^5.19.6",
-    "xxd-log": "^1.0.3"
+    "xxd-log": "^1.0.3",
+    "xxd-smartdoc-middleware": "^1.0.5"
   }
 }
